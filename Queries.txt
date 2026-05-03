@@ -1,0 +1,1512 @@
+Microsoft Windows [Version 10.0.26200.8246]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\vanis>mongosh
+Current Mongosh Log ID: 69f6e7405778878010abc113
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.8.3
+Using MongoDB:          8.2.7
+Using Mongosh:          2.8.3
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2026-05-03T11:28:49.054+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> show dbs
+admin   40.00 KiB
+config  36.00 KiB
+local   40.00 KiB
+test> use BCA
+switched to db BCA
+BCA> dir
+ReferenceError: dir is not defined
+BCA> show dbs
+admin   40.00 KiB
+config  72.00 KiB
+local   40.00 KiB
+BCA> db.createCollection("Students")
+{ ok: 1 }
+BCA> show dbs
+BCA       8.00 KiB
+admin    40.00 KiB
+config  108.00 KiB
+local    40.00 KiB
+BCA> db
+BCA
+BCA> db.dropDatabase
+[Function: dropDatabase] AsyncFunction {
+  apiVersions: [ 1, Infinity ],
+  returnsPromise: true,
+  serverVersions: [ '0.0.0', '999.999.999' ],
+  topologies: [ 'ReplSet', 'Standalone', 'Sharded', 'LoadBalanced' ],
+  returnType: { type: 'unknown', attributes: {} },
+  deprecated: false,
+  platforms: [ 'Compass', 'Browser', 'CLI' ],
+  isDirectShellCommand: false,
+  acceptsRawInput: false,
+  shellCommandCompleter: undefined,
+  newShellCommandCompleter: undefined,
+  help: [Function (anonymous)] Help
+}
+BCA> db.dropDatabase()
+{ ok: 1, dropped: 'BCA' }
+BCA> use BCA1
+switched to db BCA1
+BCA1> db.createCollection("Students")
+{ ok: 1 }
+BCA1> show dbs
+BCA1      8.00 KiB
+admin    40.00 KiB
+config  108.00 KiB
+local    40.00 KiB
+BCA1> db.createCollection("Employees")
+{ ok: 1 }
+BCA1> db.createCollection("Branch")
+{ ok: 1 }
+BCA1> show collections
+Branch
+Employees
+Students
+BCA1> db.students
+BCA1.students
+BCA1> db.students.insertOne({name:"Mike", age:19.4, cgpa:7.8,gender:"Male",fees:true})
+{
+  acknowledged: true,
+  insertedId: ObjectId('69f6f8415778878010abc114')
+}
+BCA1> db.students.insertOne({name:"Prem", age:20, cgpa:9.2,gender:"Male"})
+{
+  acknowledged: true,
+  insertedId: ObjectId('69f6f8c05778878010abc115')
+}
+BCA1> db.students.insertMany([{name:"Virat", age:20, cgpa:8.6, gender:"Male", fees:false}, {name:"ViraBCA1> {name:"Virat", age:20, cgpa:8.6, gender:"Male", fees:false},
+BCA1> db.students.insertMany([{name:"Virat", age:20, cgpa:8.9, gender:"Male", fees:false}, {name:"Rakshita", age:19, cgpa:6.9, gender:"Female", fees:true}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69f6fa0d5778878010abc116'),
+    '1': ObjectId('69f6fa0d5778878010abc117')
+  }
+}
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male'
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 20,
+    cgpa: 8.9,
+    gender: 'Male',
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc117'),
+    name: 'Rakshita',
+    age: 19,
+    cgpa: 6.9,
+    gender: 'Female',
+    fees: true
+  }
+]
+BCA1> db.students.find(1)
+MongoInvalidArgumentError: Query filter must be a plain object or ObjectId
+BCA1> db.students.find(rakshit)
+ReferenceError: rakshit is not defined
+BCA1> db.students.find.sort()
+TypeError: db.students.find.sort is not a function
+BCA1> db.students.find().sort(age)
+ReferenceError: age is not defined
+BCA1> db.students.find().sort({age:1}, cgpa:1)
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:37)
+
+> 1 | db.students.find().sort({age:1}, cgpa:1)
+    |                                      ^
+  2 |
+
+BCA1> db.students.find().sort({age:1, cgpa:1})
+[
+  {
+    _id: ObjectId('69f6fa0d5778878010abc117'),
+    name: 'Rakshita',
+    age: 19,
+    cgpa: 6.9,
+    gender: 'Female',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 20,
+    cgpa: 8.9,
+    gender: 'Male',
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male'
+  }
+]
+BCA1> db.students.find().limit(1)
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: true
+  }
+]
+BCA1> db.students.find().limit(2)
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male'
+  }
+]
+BCA1> db.students.find().sort({cgpa:-1}).limit(1)
+[
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male'
+  }
+]
+BCA1> db.students.find({age:20},{name:true})
+[
+  { _id: ObjectId('69f6f8c05778878010abc115'), name: 'Prem' },
+  { _id: ObjectId('69f6fa0d5778878010abc116'), name: 'Virat' }
+]
+BCA1> db.students.find({age:20},{name:true, _id:false})
+[ { name: 'Prem' }, { name: 'Virat' } ]
+BCA1> db.students.find({ cgpa:9.0 })
+
+BCA1> db.students.find({ cgpa:9.2 })
+[
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male'
+  }
+]
+BCA1> db.students.find({ cgpa<9.2 })
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:23)
+
+> 1 | db.students.find({ cgpa<9.2 })
+    |                        ^
+  2 |
+
+BCA1> db.students.find({ cgpa < 9.2 })
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:24)
+
+> 1 | db.students.find({ cgpa < 9.2 })
+    |                         ^
+  2 |
+
+BCA1>
+
+BCA1>
+
+BCA1>
+
+BCA1>
+
+BCA1>
+
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male'
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 20,
+    cgpa: 8.9,
+    gender: 'Male',
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc117'),
+    name: 'Rakshita',
+    age: 19,
+    cgpa: 6.9,
+    gender: 'Female',
+    fees: true
+  }
+]
+BCA1> db.students.updateOne({name:'virat'},{$set:{age:22}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+BCA1> db.students.find({nmae:'virat'})
+
+BCA1> db.students.find({name:'virat'})
+
+BCA1> db.students.find({name:'Virat'})
+[
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 20,
+    cgpa: 8.9,
+    gender: 'Male',
+    fees: false
+  }
+]
+BCA1> db.students.find
+[Function: find] AsyncFunction {
+  returnsPromise: true,
+  apiVersions: [ 1, Infinity ],
+  returnType: 'Cursor',
+  serverVersions: [ '0.0.0', '999.999.999' ],
+  topologies: [ 'ReplSet', 'Standalone', 'Sharded', 'LoadBalanced' ],
+  deprecated: false,
+  platforms: [ 'Compass', 'Browser', 'CLI' ],
+  isDirectShellCommand: false,
+  acceptsRawInput: false,
+  shellCommandCompleter: undefined,
+  newShellCommandCompleter: undefined,
+  help: [Function (anonymous)] Help
+}
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male'
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 20,
+    cgpa: 8.9,
+    gender: 'Male',
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc117'),
+    name: 'Rakshita',
+    age: 19,
+    cgpa: 6.9,
+    gender: 'Female',
+    fees: true
+  }
+]
+BCA1> db.students.updateOne({name:'Virat'},{$set:{age:22}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BCA1> db.students.find({name:'Virat'})
+[
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 22,
+    cgpa: 8.9,
+    gender: 'Male',
+    fees: false
+  }
+]
+BCA1> db.students.updateOne({name:'Virat'},{$set:{fees:true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BCA1> db.students.find({name:'Virat'})
+[
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 22,
+    cgpa: 8.9,
+    gender: 'Male',
+    fees: true
+  }
+]
+BCA1> db.students.updateOne({name:'Virat'},{$set:{age:23, cgpa:4.5}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BCA1> db.students.find({name:'Virat'})
+[
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: true
+  }
+]
+BCA1> db.students.updateOne({name:'rakshita'},{$set:{name:'rakshitaa', cgpa:6.75}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+BCA1> db.students.updateMany({}, {$set:{courses:['CN', 'Web Tech', 'DAA']}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 4,
+  upsertedCount: 0
+}
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: true,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: true,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc117'),
+    name: 'Rakshita',
+    age: 19,
+    cgpa: 6.9,
+    gender: 'Female',
+    fees: true,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  }
+]
+BCA1> db.students.updateMany({fess:{$exists:false},{$set:{fees:true}})
+Uncaught:
+SyntaxError: Unexpected token (1:45)
+
+> 1 | db.students.updateMany({fess:{$exists:false},{$set:{fees:true}})
+    |                                              ^
+  2 |
+
+BCA1> db.students.updateMany({fess:{$exists:false}},{$set:{fees:true}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: true,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ],
+    fees: true
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: true,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc117'),
+    name: 'Rakshita',
+    age: 19,
+    cgpa: 6.9,
+    gender: 'Female',
+    fees: true,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  }
+]
+BCA1> db.students.updateMany({fess:{$exists:true}},{$set:{fees:false}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: true,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ],
+    fees: true
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: true,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc117'),
+    name: 'Rakshita',
+    age: 19,
+    cgpa: 6.9,
+    gender: 'Female',
+    fees: true,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  }
+]
+BCA1> db.students.updateMany({},{$set:{fees:false}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 4,
+  upsertedCount: 0
+}
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ],
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc117'),
+    name: 'Rakshita',
+    age: 19,
+    cgpa: 6.9,
+    gender: 'Female',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  }
+]
+BCA1> db.students.deleteOne({name:'rakshita'})
+{ acknowledged: true, deletedCount: 0 }
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ],
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc117'),
+    name: 'Rakshita',
+    age: 19,
+    cgpa: 6.9,
+    gender: 'Female',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  }
+]
+BCA1> db.students.deleteOne({name:'Rakshita'})
+{ acknowledged: true, deletedCount: 1 }
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ],
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  }
+]
+BCA1> db.students.deleteMany({fees:'false'})
+{ acknowledged: true, deletedCount: 0 }
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ],
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  }
+]
+BCA1> db.students.insertMany([{name:'rohit', age:21, fees:true},{name:'Rahul', age:22, fees:true}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69f7199c5778878010abc118'),
+    '1': ObjectId('69f7199c5778878010abc119')
+  }
+}
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ],
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f7199c5778878010abc118'),
+    name: 'rohit',
+    age: 21,
+    fees: true
+  },
+  {
+    _id: ObjectId('69f7199c5778878010abc119'),
+    name: 'Rahul',
+    age: 22,
+    fees: true
+  }
+]
+BCA1> db.students.deleteMany({fees:true})
+{ acknowledged: true, deletedCount: 2 }
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ],
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  }
+]
+BCA1> db.students.find({fees:{$exists:true}})
+[
+  {
+    _id: ObjectId('69f6f8415778878010abc114'),
+    name: 'Mike',
+    age: 19.4,
+    cgpa: 7.8,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  },
+  {
+    _id: ObjectId('69f6f8c05778878010abc115'),
+    name: 'Prem',
+    age: 20,
+    cgpa: 9.2,
+    gender: 'Male',
+    courses: [ 'CN', 'Web Tech', 'DAA' ],
+    fees: false
+  },
+  {
+    _id: ObjectId('69f6fa0d5778878010abc116'),
+    name: 'Virat',
+    age: 23,
+    cgpa: 4.5,
+    gender: 'Male',
+    fees: false,
+    courses: [ 'CN', 'Web Tech', 'DAA' ]
+  }
+]
+BCA1> db.students.deleteMany({fees:{$exists:true}})
+{ acknowledged: true, deletedCount: 3 }
+BCA1> db.students.find({fees:{$exists:true}})
+
+BCA1> db.students.find()
+
+BCA1> db.students.insertMany([{name:'Vani', age:19, cgpa:8.3, gender:'female', fees:false}, {name:'Bhumi', age:21, cgpa:9.2, gender:'female', fees:true}, {name:'ravi', age:23, gender:'male', fees:true},{name:'aru', age:20, cgpa:8.6, gender:'female', fees:true }])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('69f71c3e5778878010abc11a'),
+    '1': ObjectId('69f71c3e5778878010abc11b'),
+    '2': ObjectId('69f71c3e5778878010abc11c'),
+    '3': ObjectId('69f71c3e5778878010abc11d')
+  }
+}
+BCA1> show dbs
+BCA1     72.00 KiB
+admin    40.00 KiB
+config  108.00 KiB
+local    40.00 KiB
+BCA1> show collections
+Branch
+Employees
+students
+Students
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11a'),
+    name: 'Vani',
+    age: 19,
+    cgpa: 8.3,
+    gender: 'female',
+    fees: false
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11c'),
+    name: 'ravi',
+    age: 23,
+    gender: 'male',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11d'),
+    name: 'aru',
+    age: 20,
+    cgpa: 8.6,
+    gender: 'female',
+    fees: true
+  }
+]
+BCA1> db.students.find({name:'vani'})
+
+BCA1> db.students.find({name:'Vani'})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11a'),
+    name: 'Vani',
+    age: 19,
+    cgpa: 8.3,
+    gender: 'female',
+    fees: false
+  }
+]
+BCA1> db.students.updateOne({name:'aru'},{$set{cgpa:9.0}})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:40)
+
+> 1 | db.students.updateOne({name:'aru'},{$set{cgpa:9.0}})
+    |                                         ^
+  2 |
+
+BCA1> db.students.updateOne({name:'aru'},{$set:{cgpa:9.0}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11a'),
+    name: 'Vani',
+    age: 19,
+    cgpa: 8.3,
+    gender: 'female',
+    fees: false
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11c'),
+    name: 'ravi',
+    age: 23,
+    gender: 'male',
+    fees: true
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11d'),
+    name: 'aru',
+    age: 20,
+    cgpa: 9,
+    gender: 'female',
+    fees: true
+  }
+]
+BCA1> db.students.updateMany({}, {$set:{course:[{'BCA', 'BBA', 'BSc']})
+Uncaught:
+SyntaxError: Unexpected token (1:48)
+
+> 1 | db.students.updateMany({}, {$set:{course:[{'BCA', 'BBA', 'BSc']})
+    |                                                 ^
+  2 |
+
+BCA1> db.students.updateMany({}, {$set:{course:['BCA', 'BBA', 'BSc']}})
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 4,
+  modifiedCount: 4,
+  upsertedCount: 0
+}
+BCA1> db.students.find()
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11a'),
+    name: 'Vani',
+    age: 19,
+    cgpa: 8.3,
+    gender: 'female',
+    fees: false,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11c'),
+    name: 'ravi',
+    age: 23,
+    gender: 'male',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11d'),
+    name: 'aru',
+    age: 20,
+    cgpa: 9,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  }
+]
+BCA1> db.students.find({name:{$ne:'aru'}})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11a'),
+    name: 'Vani',
+    age: 19,
+    cgpa: 8.3,
+    gender: 'female',
+    fees: false,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11c'),
+    name: 'ravi',
+    age: 23,
+    gender: 'male',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  }
+]
+BCA1> db.students.find({name:{$eq:’aru’}})
+Uncaught:
+SyntaxError: Unexpected character '’'. (1:28)
+
+> 1 | db.students.find({name:{$eq:’aru’}})
+    |                             ^
+  2 |
+
+BCA1> db.students.find({name:{$eq:'aru'}})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11d'),
+    name: 'aru',
+    age: 20,
+    cgpa: 9,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  }
+]
+BCA1> db.students.find({age:{$gt:20}})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11c'),
+    name: 'ravi',
+    age: 23,
+    gender: 'male',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  }
+]
+BCA1> db.students.find({age:{$gte:20}})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11c'),
+    name: 'ravi',
+    age: 23,
+    gender: 'male',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11d'),
+    name: 'aru',
+    age: 20,
+    cgpa: 9,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  }
+]
+BCA1> db.students.insertOne({name:'ram', age:30, cgpa:9.2})
+{
+  acknowledged: true,
+  insertedId: ObjectId('69f7215a5778878010abc11e')
+}
+BCA1> db.students.find({age:{$gte:21, $lte:30}})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11c'),
+    name: 'ravi',
+    age: 23,
+    gender: 'male',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f7215a5778878010abc11e'),
+    name: 'ram',
+    age: 30,
+    cgpa: 9.2
+  }
+]
+BCA1> db.students.find({age:{$in:[21.30]}})
+
+BCA1> db.students.find({age:{$in:[21, 30]}})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f7215a5778878010abc11e'),
+    name: 'ram',
+    age: 30,
+    cgpa: 9.2
+  }
+]
+BCA1> db.students.find({age:{$nin:[21, 30]}})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11a'),
+    name: 'Vani',
+    age: 19,
+    cgpa: 8.3,
+    gender: 'female',
+    fees: false,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11c'),
+    name: 'ravi',
+    age: 23,
+    gender: 'male',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11d'),
+    name: 'aru',
+    age: 20,
+    cgpa: 9,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  }
+]
+BCA1> db.students.insertMany([{name:'ayush', age:20, cgpa:8.3, gender:'female', fees:false})
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:85)
+
+> 1 | db.students.insertMany([{name:'ayush', age:20, cgpa:8.3, gender:'female', fees:false})
+    |                                                                                      ^
+  2 |
+
+BCA1> db.students.insertOne({name:'ayush', age:20, cgpa:8.3, gender:'female', fees:false})
+{
+  acknowledged: true,
+  insertedId: ObjectId('69f725235778878010abc11f')
+}
+BCA1> db.students.find({$and:[{age:30},{cgpa:{$gte:8}}]})
+[
+  {
+    _id: ObjectId('69f7215a5778878010abc11e'),
+    name: 'ram',
+    age: 30,
+    cgpa: 9.2
+  }
+]
+BCA1> db.students.find({$or:[{age:42},{cgpa:{$gte:9}}]})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11d'),
+    name: 'aru',
+    age: 20,
+    cgpa: 9,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f7215a5778878010abc11e'),
+    name: 'ram',
+    age: 30,
+    cgpa: 9.2
+  }
+]
+BCA1> db.students.find({$or:[{age:{$lte:28},{cgpa:{$gte:9}}]})
+Uncaught:
+SyntaxError: Unexpected token (1:38)
+
+> 1 | db.students.find({$or:[{age:{$lte:28},{cgpa:{$gte:9}}]})
+    |                                       ^
+  2 |
+
+BCA1> db.students.find({$or:[{age:{$lte:28}},{cgpa:{$gte:9}}]})
+[
+  {
+    _id: ObjectId('69f71c3e5778878010abc11a'),
+    name: 'Vani',
+    age: 19,
+    cgpa: 8.3,
+    gender: 'female',
+    fees: false,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11b'),
+    name: 'Bhumi',
+    age: 21,
+    cgpa: 9.2,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11c'),
+    name: 'ravi',
+    age: 23,
+    gender: 'male',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f71c3e5778878010abc11d'),
+    name: 'aru',
+    age: 20,
+    cgpa: 9,
+    gender: 'female',
+    fees: true,
+    course: [ 'BCA', 'BBA', 'BSc' ]
+  },
+  {
+    _id: ObjectId('69f7215a5778878010abc11e'),
+    name: 'ram',
+    age: 30,
+    cgpa: 9.2
+  },
+  {
+    _id: ObjectId('69f725235778878010abc11f'),
+    name: 'ayush',
+    age: 20,
+    cgpa: 8.3,
+    gender: 'female',
+    fees: false
+  }
+]
+BCA1> db.students.find({name:'ravi'}).explain('executionStats')
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'BCA1.students',
+    parsedQuery: { name: { '$eq': 'ravi' } },
+    indexFilterSet: false,
+    queryHash: 'F4DDDCDC',
+    planCacheShapeHash: 'F4DDDCDC',
+    planCacheKey: 'E45FBFA1',
+    optimizationTimeMillis: 0,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'COLLSCAN',
+      filter: { name: { '$eq': 'ravi' } },
+      direction: 'forward'
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 1,
+    executionTimeMillis: 9,
+    totalKeysExamined: 0,
+    totalDocsExamined: 6,
+    executionStages: {
+      isCached: false,
+      stage: 'COLLSCAN',
+      filter: { name: { '$eq': 'ravi' } },
+      nReturned: 1,
+      executionTimeMillisEstimate: 0,
+      works: 7,
+      advanced: 1,
+      needTime: 5,
+      needYield: 0,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      direction: 'forward',
+      docsExamined: 6
+    }
+  },
+  queryShapeHash: '30CCD64021578BA692219D52A360081BAB751E148116C14C248C047B45570C82',
+  command: { find: 'students', filter: { name: 'ravi' }, '$db': 'BCA1' },
+  serverInfo: {
+    host: 'vanishree',
+    port: 27017,
+    version: '8.2.7',
+    gitVersion: '8f6785264a643d2eeb5e4046f7876a23e40e1a09'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+BCA1> db.students.createIndex({name:1})
+name_1
+BCA1> db.students.find(name_1)
+ReferenceError: name_1 is not defined
+BCA1> db.students.find({name:'ravi'}).explain('executionStats')
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'BCA1.students',
+    parsedQuery: { name: { '$eq': 'ravi' } },
+    indexFilterSet: false,
+    queryHash: 'F4DDDCDC',
+    planCacheShapeHash: 'F4DDDCDC',
+    planCacheKey: '34C29116',
+    optimizationTimeMillis: 9,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { name: 1 },
+        indexName: 'name_1',
+        isMultiKey: false,
+        multiKeyPaths: { name: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { name: [ '["ravi", "ravi"]' ] }
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 1,
+    executionTimeMillis: 10,
+    totalKeysExamined: 1,
+    totalDocsExamined: 1,
+    executionStages: {
+      isCached: false,
+      stage: 'FETCH',
+      nReturned: 1,
+      executionTimeMillisEstimate: 0,
+      works: 2,
+      advanced: 1,
+      needTime: 0,
+      needYield: 0,
+      saveState: 0,
+      restoreState: 0,
+      isEOF: 1,
+      docsExamined: 1,
+      alreadyHasObj: 0,
+      inputStage: {
+        stage: 'IXSCAN',
+        nReturned: 1,
+        executionTimeMillisEstimate: 0,
+        works: 2,
+        advanced: 1,
+        needTime: 0,
+        needYield: 0,
+        saveState: 0,
+        restoreState: 0,
+        isEOF: 1,
+        keyPattern: { name: 1 },
+        indexName: 'name_1',
+        isMultiKey: false,
+        multiKeyPaths: { name: [] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { name: [ '["ravi", "ravi"]' ] },
+        keysExamined: 1,
+        seeks: 1,
+        dupsTested: 0,
+        dupsDropped: 0
+      }
+    }
+  },
+  queryShapeHash: '30CCD64021578BA692219D52A360081BAB751E148116C14C248C047B45570C82',
+  command: { find: 'students', filter: { name: 'ravi' }, '$db': 'BCA1' },
+  serverInfo: {
+    host: 'vanishree',
+    port: 27017,
+    version: '8.2.7',
+    gitVersion: '8f6785264a643d2eeb5e4046f7876a23e40e1a09'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeRestricted',
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1
+  },
+  ok: 1
+}
+BCA1> db.students.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { name: 1 }, name: 'name_1' }
+]
+BCA1> db.students.dropIndexes()
+{
+  nIndexesWas: 2,
+  msg: 'non-_id indexes dropped for collection',
+  ok: 1
+}
+BCA1> show collection
+MongoshInvalidInputError: [COMMON-10001] 'collection' is not a valid argument for "show".
+BCA1> show collections
+Branch
+Employees
+students
+Students
+BCA1> db.students.drop()
+true
+BCA1> show collections
+Branch
+Employees
+Students
+BCA1> db.students
+BCA1.students
+BCA1> db.dropDatabase()
+{ ok: 1, dropped: 'BCA1' }
+BCA1>
